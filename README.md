@@ -1,5 +1,9 @@
 # ngx-virtual-scroll
 
+## Why
+
+In 2016 we were developing a ledger at Dinero Regnskab an for that needed to handle multiple lines (more than 10.000). 
+
 ## Installation
 
 To install this library, run:

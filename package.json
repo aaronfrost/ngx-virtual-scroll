@@ -1,13 +1,10 @@
 {
   "name": "ngx-virtual-scroll",
-  "version": "0.0.0",
+  "version": "2.0.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "build": "ng run ngx-virtual-scroll:build:production"
   },
   "private": true,
   "dependencies": {

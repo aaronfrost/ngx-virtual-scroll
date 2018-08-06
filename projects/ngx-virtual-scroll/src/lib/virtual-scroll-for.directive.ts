@@ -213,6 +213,8 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
             offsets: slicedOffsets,
             index: from
         });
+
+        this._changeDetectorRef.detectChanges();
     }
 
     private getScrollTopAndHeight(): number[] {
@@ -291,6 +293,7 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
         if (!this.useWindowScroll) {
 
             const scrollTopIndex = this.getIndexScrollTop();
+
             if (scrollTopIndex > -1) {
 
                 const itemOffset = this._collectionOffsets[scrollTopIndex];
@@ -328,6 +331,8 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
     }
 
     private setScrollOffset(scrollTop: number) {
-        this._renderer.setProperty(this._elementRef.nativeElement, 'scrollTop', scrollTop);
+        this._requestAnimationFrame.run(() => {
+            this._renderer.setProperty(this._elementRef.nativeElement, 'scrollTop', scrollTop);
+        });
     }
 }
