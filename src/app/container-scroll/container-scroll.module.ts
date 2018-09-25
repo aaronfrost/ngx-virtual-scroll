@@ -10,16 +10,10 @@ import { ContainerScrollRoutingModule } from './container-scroll.routing';
     imports: [
         CommonModule,
         ContainerScrollRoutingModule,
-        NgxVirtualScrollModule.forRoot(),
+        NgxVirtualScrollModule.forRoot()
     ],
-    declarations: [
-        ContainerScrollComponent
-    ],
-    bootstrap: [
-        ContainerScrollComponent
-    ],
-    exports: [
-        ContainerScrollComponent
-    ]
+    declarations: [ContainerScrollComponent],
+    bootstrap: [ContainerScrollComponent],
+    exports: [ContainerScrollComponent]
 })
-export class ContainerScrollModule { }
+export class ContainerScrollModule {}

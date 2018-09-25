@@ -9,7 +9,8 @@ const appRoutes: Routes = [
     },
     {
         path: 'container-scroll',
-        loadChildren: './container-scroll/container-scroll.module#ContainerScrollModule'
+        loadChildren:
+            './container-scroll/container-scroll.module#ContainerScrollModule'
     },
     {
         path: 'window-scroll',
@@ -18,11 +19,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-    imports: [
-        RouterModule.forRoot(appRoutes)
-    ],
-    exports: [
-        RouterModule
-    ]
+    imports: [RouterModule.forRoot(appRoutes)],
+    exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

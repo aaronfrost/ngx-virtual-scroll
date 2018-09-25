@@ -11,11 +11,7 @@ const windowScrollRoutes: Routes = [
 ];
 
 @NgModule({
-    imports: [
-        RouterModule.forChild(windowScrollRoutes)
-    ],
-    exports: [
-        RouterModule
-    ]
+    imports: [RouterModule.forChild(windowScrollRoutes)],
+    exports: [RouterModule]
 })
-export class WindowScrollRoutingModule { }
+export class WindowScrollRoutingModule {}

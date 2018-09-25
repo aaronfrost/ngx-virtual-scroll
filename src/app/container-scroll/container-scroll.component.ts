@@ -26,47 +26,48 @@ import { Slice } from 'ngx-virtual-scroll';
             </div>
         </ul>
       `,
-    styles: [`
-        .virtual-scroll {
-            max-height: 200px;
-            position: relative;
-            overflow-x: hidden;
-            overflow-y: auto;
-            margin: auto;
-            padding: 1em;
-            background-color: #fff;
-            border-radius: 4px;
-            max-width: 400px;
-            box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.1);
-        }
-        .virtual-scroll-container {
-            position: relative;
-        }
-        .virtual-scroll-item {
-            display: block;
-            padding: 1em;
-            clear: both;
-            font-weight: normal;
-            color: #333;
-            cursor: pointer;
-            backface-visibility: hidden;
-            width: 100%;
-            position: absolute;
-            box-sizing: border-box;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-        }
-        .virtual-scroll-item.selected {
-            background-color: #f7b03c;
-            color: #fff;
-        }
-    `]
+    styles: [
+        `
+            .virtual-scroll {
+                max-height: 200px;
+                position: relative;
+                overflow-x: hidden;
+                overflow-y: auto;
+                margin: auto;
+                padding: 1em;
+                background-color: #fff;
+                border-radius: 4px;
+                max-width: 400px;
+                box-shadow: 0px 3px 10px -1px rgba(0, 0, 0, 0.1);
+            }
+            .virtual-scroll-container {
+                position: relative;
+            }
+            .virtual-scroll-item {
+                display: block;
+                padding: 1em;
+                clear: both;
+                font-weight: normal;
+                color: #333;
+                cursor: pointer;
+                backface-visibility: hidden;
+                width: 100%;
+                position: absolute;
+                box-sizing: border-box;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                background-color: #f5f5f5;
+                border-radius: 4px;
+            }
+            .virtual-scroll-item.selected {
+                background-color: #f7b03c;
+                color: #fff;
+            }
+        `
+    ]
 })
 export class ContainerScrollComponent implements OnInit {
-
     public collection: any[] = [];
     public height = 0;
     public slice: { collection: any[] };

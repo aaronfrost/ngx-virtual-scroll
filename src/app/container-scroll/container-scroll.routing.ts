@@ -11,11 +11,7 @@ const containerScrollRoutes: Routes = [
 ];
 
 @NgModule({
-    imports: [
-        RouterModule.forChild(containerScrollRoutes)
-    ],
-    exports: [
-        RouterModule
-    ]
+    imports: [RouterModule.forChild(containerScrollRoutes)],
+    exports: [RouterModule]
 })
-export class ContainerScrollRoutingModule { }
+export class ContainerScrollRoutingModule {}

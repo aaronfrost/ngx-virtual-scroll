@@ -19,38 +19,39 @@ import { Slice } from 'ngx-virtual-scroll';
 			</ng-container>
 		</ul>
   	`,
-    styles: [`
-		.virtual-scroll {
-			width: 100%;
-			position: relative;
-			margin: 0;
-			padding: 0;
-		}
-		.virtual-scroll-container {
-			position: relative;
-		}
-		.virtual-scroll-item {
-			display: block;
-			padding: 1em;
-			clear: both;
-			font-weight: normal;
-			color: #333;
-			cursor: pointer;
-			backface-visibility: hidden;
-			width: 100%;
-			position: absolute;
-			box-sizing: border-box;
-			text-overflow: ellipsis;
-			overflow: hidden;
-			white-space: nowrap;
-			background-color: #fff;
-			border-radius: 4px;
-			box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.1);
-		}
-	`]
+    styles: [
+        `
+            .virtual-scroll {
+                width: 100%;
+                position: relative;
+                margin: 0;
+                padding: 0;
+            }
+            .virtual-scroll-container {
+                position: relative;
+            }
+            .virtual-scroll-item {
+                display: block;
+                padding: 1em;
+                clear: both;
+                font-weight: normal;
+                color: #333;
+                cursor: pointer;
+                backface-visibility: hidden;
+                width: 100%;
+                position: absolute;
+                box-sizing: border-box;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                background-color: #fff;
+                border-radius: 4px;
+                box-shadow: 0px 3px 10px -1px rgba(0, 0, 0, 0.1);
+            }
+        `
+    ]
 })
 export class WindowScrollComponent implements OnInit {
-
     public collection: any[] = [];
     public height = 0;
     public slice: Slice;

@@ -30,20 +30,29 @@ export interface Slice {
 @Directive({
     selector: '[ngxVirtualScrollFor]'
 })
-export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDestroy {
+export class VirtualScrollForDirective
+    implements AfterViewInit, OnChanges, OnDestroy {
+    @Output()
+    containerHeight$: EventEmitter<number> = new EventEmitter<number>();
+    @Output()
+    sliced$: EventEmitter<Slice> = new EventEmitter<Slice>();
 
-    @Output() containerHeight$: EventEmitter<number> = new EventEmitter<number>();
-    @Output() sliced$: EventEmitter<Slice> = new EventEmitter<Slice>();
+    @Input()
+    scrollToIndex$: EventEmitter<number> = new EventEmitter<number>();
 
-    @Input() scrollToIndex$: EventEmitter<number> = new EventEmitter<number>();
+    @Input()
+    useWindowScroll = false;
+    @Input()
+    containerHeight = 0;
+    @Input()
+    fixedItemHeight = 0;
+    @Input()
+    defaultItemHeight = 0;
 
-    @Input() useWindowScroll = false;
-    @Input() containerHeight = 0;
-    @Input() fixedItemHeight = 0;
-    @Input() defaultItemHeight = 0;
-
-    @Input() getItemHeight: (item: ForItem) => number;
-    @Input() getIndexScrollTop: () => number;
+    @Input()
+    getItemHeight: (item: ForItem) => number;
+    @Input()
+    getIndexScrollTop: () => number;
 
     @Input('ngxVirtualScrollFor')
     set originalCollection(collection: ForItem[]) {
@@ -84,13 +93,12 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
     }
 
     public ngAfterViewInit() {
-
-        this._scrollToIndexSubscription = this.scrollToIndex$
-            .subscribe((index: number) => this.scrollToOffsetByIndex(index));
+        this._scrollToIndexSubscription = this.scrollToIndex$.subscribe(
+            (index: number) => this.scrollToOffsetByIndex(index)
+        );
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-
         this._zone.runOutsideAngular(() => {
             if (this.useWindowScroll) {
                 this.listenForWindowScroll();
@@ -99,23 +107,26 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
             }
         });
 
-        this._collectionOffsets = this.calculateOffsets(this._originalCollection);
+        this._collectionOffsets = this.calculateOffsets(
+            this._originalCollection
+        );
         this.emitHeight();
 
         if (!this._internalScrollTop && !this._internalScrollHeight) {
-
-            const [ top, height ] = this.getScrollTopAndHeight();
+            const [top, height] = this.getScrollTopAndHeight();
 
             this._internalScrollTop = top;
             this._internalScrollHeight = height;
         }
 
-        this.executeSlicing(this._internalScrollTop, this._internalScrollHeight);
+        this.executeSlicing(
+            this._internalScrollTop,
+            this._internalScrollHeight
+        );
         this.scrollToOffset();
     }
 
     public ngOnDestroy() {
-
         if (typeof this._scrollListener === 'function') {
             this._scrollListener();
         }
@@ -126,13 +137,13 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
     }
 
     private listenForWindowScroll() {
-
         if (!this._scrollBindingIsSet) {
-
             this._scrollListener = this._renderer.listen(
                 'window',
                 'scroll',
-                (e) => { this.handleScroll(); }
+                e => {
+                    this.handleScroll();
+                }
             );
 
             this._scrollBindingIsSet = true;
@@ -140,14 +151,12 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
     }
 
     private listenForElementScroll() {
-
         if (!this._scrollBindingIsSet) {
-
             this._scrollElement = this._elementRef.nativeElement;
             this._scrollListener = this._renderer.listen(
                 this._scrollElement,
                 'scroll',
-                (e) => this.handleScroll()
+                e => this.handleScroll()
             );
 
             this._scrollBindingIsSet = true;
@@ -156,8 +165,7 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
 
     private handleScroll() {
         this._requestAnimationFrame.run(() => {
-
-            const [ top, height ] = this.getScrollTopAndHeight();
+            const [top, height] = this.getScrollTopAndHeight();
 
             this._internalScrollTop = top;
             this._internalScrollHeight = height;
@@ -169,7 +177,6 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
     }
 
     private calculateOffsets(collection: ForItem[]) {
-
         let item;
         let height;
         let offset = this.fixedItemHeight;
@@ -178,8 +185,7 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
         let i = length;
 
         while (i > 0) {
-
-            item = collection[ length - i ];
+            item = collection[length - i];
             height = this.getItemHeight(item);
 
             offset += height;
@@ -192,7 +198,6 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
     }
 
     private emitHeight() {
-
         const lastIndex = this._collectionOffsets.length - 1;
         const height = this._collectionOffsets[lastIndex];
 
@@ -203,8 +208,11 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
     }
 
     private executeSlicing(top: number, height: number) {
-
-        const [ from, to ] = this.getSliceRange(this._collectionOffsets, top, height);
+        const [from, to] = this.getSliceRange(
+            this._collectionOffsets,
+            top,
+            height
+        );
         const slicedCollection = this._originalCollection.slice(from, to);
         const slicedOffsets = this._collectionOffsets.slice(from, to);
 
@@ -218,11 +226,10 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
     }
 
     private getScrollTopAndHeight(): number[] {
-
         let top = 0;
         let height = 0;
 
-        if (this.useWindowScroll) {
+        if (this.useWindowScroll) {
             top = -this._elementRef.nativeElement.getBoundingClientRect().top;
             height = top + this._windowRef.nativeWindow.innerHeight;
         } else {
@@ -230,22 +237,25 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
             height = top + this.containerHeight;
         }
 
-        return [ top, height ];
+        return [top, height];
     }
 
-    private getSliceRange(offsets: number[], scrollTop: number, scrollHeight: number): number[] {
-
+    private getSliceRange(
+        offsets: number[],
+        scrollTop: number,
+        scrollHeight: number
+    ): number[] {
         const { length } = offsets;
         const lastIndex = length - 1;
-        const lastOffset = offsets[ lastIndex ];
+        const lastOffset = offsets[lastIndex];
 
         // Handle edge-cases.
         if (length === 0) {
-            return [ 0, 0 ];
+            return [0, 0];
         }
 
         if (scrollHeight <= 0) {
-            return [ 0, 1 ];
+            return [0, 1];
         }
 
         // Normalize the range.
@@ -259,43 +269,37 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
 
         let from = 0;
 
-        while (scrollTop > 0 && scrollTop >= offsets[ from ]) {
+        while (scrollTop > 0 && scrollTop >= offsets[from]) {
             from++;
         }
 
         let to = from;
 
-        while (scrollHeight >= offsets[ to ]) {
+        while (scrollHeight >= offsets[to]) {
             to++;
         }
 
         // Ensure edges are included
-        from = (from > 0) ? from - 1 : from;
+        from = from > 0 ? from - 1 : from;
         to = to + 2;
 
-        return [ from, to ];
+        return [from, to];
     }
 
     private scrollToOffsetByIndex(index: number) {
-
         if (this.useWindowScroll) {
-
             const offset = this._collectionOffsets[index];
             if (typeof offset !== 'undefined' && offset !== null) {
-
                 this._windowRef.scrollTo(this._windowRef.scrollLeft, offset);
             }
         }
     }
 
     private scrollToOffset() {
-
         if (!this.useWindowScroll) {
-
             const scrollTopIndex = this.getIndexScrollTop();
 
             if (scrollTopIndex > -1) {
-
                 const itemOffset = this._collectionOffsets[scrollTopIndex];
 
                 let offset = 0;
@@ -303,7 +307,10 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
                 const resultsContainerScrollTop = this._scrollTop;
                 const itemOffsetAndHeight = itemOffset;
 
-                if (itemOffsetAndHeight > (resultsContainerScrollTop + resultsContainerHeight)) {
+                if (
+                    itemOffsetAndHeight >
+                    resultsContainerScrollTop + resultsContainerHeight
+                ) {
                     offset = itemOffsetAndHeight - resultsContainerHeight;
                     this._scrollTop = offset;
                     this.setScrollOffset(this._scrollTop);
@@ -320,9 +327,7 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
                 if (this._scrollTop === 0) {
                     this._scrollTop = 0;
                 }
-
             } else {
-
                 this._scrollTop = 0;
             }
 
@@ -332,7 +337,11 @@ export class VirtualScrollForDirective implements AfterViewInit, OnChanges, OnDe
 
     private setScrollOffset(scrollTop: number) {
         this._requestAnimationFrame.run(() => {
-            this._renderer.setProperty(this._elementRef.nativeElement, 'scrollTop', scrollTop);
+            this._renderer.setProperty(
+                this._elementRef.nativeElement,
+                'scrollTop',
+                scrollTop
+            );
         });
     }
 }

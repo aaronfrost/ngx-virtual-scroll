@@ -10,16 +10,10 @@ import { WindowScrollRoutingModule } from './window-scroll.routing';
     imports: [
         CommonModule,
         WindowScrollRoutingModule,
-        NgxVirtualScrollModule.forRoot(),
+        NgxVirtualScrollModule.forRoot()
     ],
-    declarations: [
-        WindowScrollComponent
-    ],
-    bootstrap: [
-        WindowScrollComponent
-    ],
-    exports: [
-        WindowScrollComponent
-    ]
+    declarations: [WindowScrollComponent],
+    bootstrap: [WindowScrollComponent],
+    exports: [WindowScrollComponent]
 })
-export class WindowScrollModule { }
+export class WindowScrollModule {}
